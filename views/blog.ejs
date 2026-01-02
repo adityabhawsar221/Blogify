@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Blog</title>
+  <%- include('./partials/head') %>
+</head>
+<body>
+  <%- include('./partials/navbar') %> 
+  <main class="container py-4">
+    <div class="row justify-content-center">
+      <div class="col-12 col-lg-9">
+        <article class="card shadow-sm border-0 rounded-3 overflow-hidden">
+          <% if (blog.coverImageUrl) { %>
+            <img
+              src="<%= blog.coverImageUrl %>"
+              alt="Cover image for <%= blog.title %>"
+              class="img-fluid w-100"
+              style="max-height: 420px; object-fit: cover;"
+            >
+          <% } %>
+
+          <div class="card-body p-4">
+            <h1 class="h3 fw-bold mb-3"><%= blog.title %></h1>
+            <div class="border-top pt-3">
+              <pre class="mb-0" style="white-space: pre-wrap;"><%= blog.body %></pre>
+            </div>
+          </div>
+
+        </article>
+        <% if (blog.createdBy) { %>
+          <% const avatarUrl = (!blog.createdBy.profileImage || blog.createdBy.profileImage === '/images/defualtAvatar.png')
+            ? '/images/defaultAvatar.png'
+            : blog.createdBy.profileImage; %>
+          <div class="container mt-4">
+            <img
+              src="<%= avatarUrl %>"
+              alt="Profile image of <%= blog.createdBy.fullName %>"
+              class="rounded-circle"
+              style="width: 50px; height: 50px; object-fit: cover;"
+            > <%= blog.createdBy.fullName %> </img>
+          </div>
+        <% } %>
+      </div>
+      
+    </div>
+
+    <div class="row justify-content-center mt-5">
+      <div class="col-12 col-lg-9">
+        <h2 class="h4 mb-4">Comments (<%= comments.length %>)</h2>
+        <form action="/blog/comment/<%= blog._id %>" method="POST" class="mb-4">
+          <div class="mb-3">
+            <label for="comment" class="form-label">Add a comment:</label>
+            <textarea class="form-control" id="comment" name="content" rows="3" required></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+        <% if (comments.length === 0) { %>
+          <p>No comments yet. Be the first to comment!</p>
+        <% } else { %>
+          <% comments.forEach(comment => { %>
+            <div class="card mb-3">
+              <div class="card-body">
+                <h5 class="card-title
+">
+                  <% const commenterAvatarUrl = (!comment.createdBy.profileImage || comment.createdBy.profileImage === '/images/defualtAvatar.png')
+                    ? '/images/defaultAvatar.png'
+                    : comment.createdBy.profileImage; %>
+                  <img
+                    src="<%= commenterAvatarUrl %>"
+                    alt="Profile image of <%= comment.createdBy.fullName %>"
+                    class="rounded-circle"
+                    style="width: 30px; height: 30px; object-fit: cover;"
+                  > <%= comment.createdBy.fullName %> </img>
+                </h5>
+                <p class="card-text"><%= comment.content %></p>
+              </div>
+            </div>
+          <% }) %>
+        <% } %>
+
+        <div>
+      </div>
+
+    </div>
+            
+
+        
+  </main>
+  <%- include('./partials/scripts') %>
+</body>
+
+</html>

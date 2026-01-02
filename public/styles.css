@@ -1,0 +1,192 @@
+/* Blogify theme (Bootstrap-friendly)
+   Uses Bootstrap CSS variables (no new hex palette). */
+
+:root {
+  --app-surface: rgba(var(--bs-body-bg-rgb), 0.82);
+  --app-surface-2: rgba(var(--bs-body-bg-rgb), 0.72);
+  --app-border: rgba(var(--bs-body-color-rgb), 0.14);
+  --app-soft-text: rgba(var(--bs-body-color-rgb), 0.72);
+
+  --app-bg-a: rgba(var(--bs-primary-rgb), 0.32);
+  --app-bg-b: rgba(var(--bs-info-rgb), 0.22);
+  --app-bg-c: rgba(var(--bs-warning-rgb), 0.14);
+  --app-bg-d: rgba(var(--bs-danger-rgb), 0.14);
+}
+
+body {
+  min-height: 100vh;
+  background:
+    radial-gradient(1200px 800px at 12% 10%, var(--app-bg-a), transparent 55%),
+    radial-gradient(1000px 700px at 88% 12%, var(--app-bg-b), transparent 55%),
+    radial-gradient(900px 650px at 20% 92%, var(--app-bg-c), transparent 50%),
+    radial-gradient(900px 650px at 82% 88%, var(--app-bg-d), transparent 50%),
+    linear-gradient(180deg, rgba(var(--bs-body-bg-rgb), 0.92), rgba(var(--bs-body-bg-rgb), 0.92));
+  background-size: 140% 140%;
+  animation: appGradient 18s ease-in-out infinite;
+}
+
+@keyframes appGradient {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body {
+    animation: none;
+  }
+
+  * {
+    scroll-behavior: auto !important;
+    transition: none !important;
+    animation: none !important;
+  }
+}
+
+/* Navbar: glassy, crisp */
+.navbar {
+  background-color: rgba(var(--bs-dark-rgb), 0.82) !important;
+  border-bottom: 1px solid rgba(var(--bs-light-rgb), 0.08);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+.navbar .navbar-brand {
+  font-weight: 800;
+  letter-spacing: 0.2px;
+  background: linear-gradient(90deg, var(--bs-info), var(--bs-warning));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.navbar .nav-link {
+  position: relative;
+  opacity: 0.92;
+  transition: opacity 180ms ease;
+}
+
+.navbar .nav-link:hover {
+  opacity: 1;
+}
+
+.navbar .nav-link::after {
+  content: "";
+  position: absolute;
+  left: 0.5rem;
+  right: 0.5rem;
+  bottom: 0.2rem;
+  height: 2px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--bs-info), var(--bs-warning));
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 180ms ease;
+}
+
+.navbar .nav-link:hover::after,
+.navbar .nav-link.active::after {
+  transform: scaleX(1);
+}
+
+/* Cards: modern surface + hover lift */
+.card {
+  background: var(--app-surface);
+  border: 1px solid var(--app-border) !important;
+  box-shadow: var(--bs-box-shadow-sm);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  transition: transform 180ms ease, box-shadow 180ms ease;
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--bs-box-shadow);
+}
+
+.card-img-top {
+  transform: scale(1.001);
+  transition: transform 260ms ease;
+}
+
+.card:hover .card-img-top {
+  transform: scale(1.03);
+}
+
+/* Simple entrance animation */
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+main .card {
+  animation: fadeUp 340ms ease both;
+}
+
+/* Buttons: colorful gradient using Bootstrap theme colors */
+.btn-primary {
+  border: 0;
+  background: linear-gradient(135deg, var(--bs-primary), var(--bs-info));
+  box-shadow: 0 10px 24px rgba(var(--bs-primary-rgb), 0.18);
+  transition: transform 160ms ease, filter 160ms ease, box-shadow 160ms ease;
+}
+
+.btn-primary:hover {
+  filter: brightness(1.03);
+  transform: translateY(-1px);
+  box-shadow: 0 14px 30px rgba(var(--bs-primary-rgb), 0.22);
+}
+
+.btn-primary:active {
+  transform: translateY(0);
+}
+
+/* Forms: cleaner inputs */
+.form-control,
+.form-select {
+  background: rgba(var(--bs-body-bg-rgb), 0.88);
+  border: 1px solid var(--app-border);
+}
+
+.form-control::placeholder {
+  color: rgba(var(--bs-body-color-rgb), 0.5);
+}
+
+.form-control:focus,
+.form-select:focus {
+  border-color: rgba(var(--bs-primary-rgb), 0.5);
+  box-shadow: 0 0 0 0.25rem rgba(var(--bs-primary-rgb), 0.18);
+}
+
+.form-text {
+  color: var(--app-soft-text);
+}
+
+/* Blog content */
+article pre {
+  font-family: inherit;
+  color: rgba(var(--bs-body-color-rgb), 0.92);
+  background: rgba(var(--bs-secondary-rgb), 0.07);
+  border: 1px solid rgba(var(--bs-secondary-rgb), 0.14);
+  border-radius: var(--bs-border-radius-lg);
+  padding: 1rem;
+}
+
+/* Alerts: slightly softer */
+.alert {
+  border: 1px solid rgba(var(--bs-body-color-rgb), 0.12);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
