@@ -60,17 +60,17 @@
           <% comments.forEach(comment => { %>
             <div class="card mb-3">
               <div class="card-body">
-                <h5 class="card-title
-">
-                  <% const commenterAvatarUrl = (!comment.createdBy.profileImage || comment.createdBy.profileImage === '/images/defualtAvatar.png')
+                <h5 class="card-title">
+                  <% const commenterName = comment.createdBy?.fullName || 'Unknown user'; %>
+                  <% const commenterAvatarUrl = (!comment.createdBy?.profileImage || comment.createdBy?.profileImage === '/images/defualtAvatar.png')
                     ? '/images/defaultAvatar.png'
                     : comment.createdBy.profileImage; %>
                   <img
                     src="<%= commenterAvatarUrl %>"
-                    alt="Profile image of <%= comment.createdBy.fullName %>"
+                    alt="Profile image of <%= commenterName %>"
                     class="rounded-circle"
                     style="width: 30px; height: 30px; object-fit: cover;"
-                  > <%= comment.createdBy.fullName %> </img>
+                  > <%= commenterName %> </img>
                 </h5>
                 <p class="card-text"><%= comment.content %></p>
               </div>
