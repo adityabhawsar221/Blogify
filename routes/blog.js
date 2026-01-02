@@ -3,11 +3,19 @@ const router = Router();
 const multer = require('multer');
 const Blog = require("../models/blog");
 const path = require('path');
+const fs = require('fs');
 const Comment = require("../models/comment");
+
+const uploadDir = process.env.UPLOAD_DIR || path.resolve('./public/uploads');
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, path.resolve(`./public/uploads/`))
+    try {
+      fs.mkdirSync(uploadDir, { recursive: true });
+      cb(null, uploadDir);
+    } catch (err) {
+      cb(err);
+    }
   },
   filename: function (req, file, cb) {
     const fileName = `${Date.now()}-${file.originalname}`;
