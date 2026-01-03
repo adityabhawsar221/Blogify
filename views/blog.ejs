@@ -28,7 +28,7 @@
 
         </article>
         <% if (blog.createdBy) { %>
-          <% const avatarUrl = (!blog.createdBy.profileImage || blog.createdBy.profileImage === '/images/defualtAvatar.png')
+          <% const avatarUrl = (!blog.createdBy.profileImage || blog.createdBy.profileImage === '/images/defaultAvatar.png')
             ? '/images/defaultAvatar.png'
             : blog.createdBy.profileImage; %>
           <div class="container mt-4">
@@ -62,7 +62,7 @@
               <div class="card-body">
                 <h5 class="card-title">
                   <% const commenterName = comment.createdBy?.fullName || 'Unknown user'; %>
-                  <% const commenterAvatarUrl = (!comment.createdBy?.profileImage || comment.createdBy?.profileImage === '/images/defualtAvatar.png')
+                  <% const commenterAvatarUrl = (!comment.createdBy?.profileImage || comment.createdBy?.profileImage === '/images/defaultAvatar.png')
                     ? '/images/defaultAvatar.png'
                     : comment.createdBy.profileImage; %>
                   <img

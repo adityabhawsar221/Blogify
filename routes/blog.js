@@ -2,28 +2,12 @@ const Router = require("express");
 const router = Router();
 const multer = require('multer');
 const Blog = require("../models/blog");
-const path = require('path');
-const fs = require('fs');
 const Comment = require("../models/comment");
+const { uploadBufferToCloudinary } = require("../services/cloudinary");
 
-const uploadDir = process.env.UPLOAD_DIR || path.resolve('./public/uploads');
-
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    try {
-      fs.mkdirSync(uploadDir, { recursive: true });
-      cb(null, uploadDir);
-    } catch (err) {
-      cb(err);
-    }
-  },
-  filename: function (req, file, cb) {
-    const fileName = `${Date.now()}-${file.originalname}`;
-    cb(null , fileName); 
-  }
-})
-
-const upload = multer({ storage:storage});
+const upload = multer({
+  storage: multer.memoryStorage(),
+});
 
 router.get("/add-new", (req,res)=>{
   return res.render("addBlog", {
@@ -32,19 +16,38 @@ router.get("/add-new", (req,res)=>{
   });
 })
 
-router.post("/" , upload.single('coverImage') , async(req,res)=>{
-  const {title , body} = req.body;
-  const coverImageUrl = req.file ? `/uploads/${req.file.filename}` : undefined;
+router.post("/", upload.single("coverImage"), async (req, res) => {
+  const { title, body } = req.body;
+
+  let coverImageUrl;
+  
+  console.log("FILE:", req.file?.originalname, req.file?.size);
+
+  if (req.file) {
+    const result = await uploadBufferToCloudinary(req.file.buffer, {
+      folder: "blogging",
+      resource_type: "image",
+    });
+
+    console.log("CLOUDINARY URL:", result.secure_url);
+
+    coverImageUrl = result.secure_url;
+  }
+
   const blog = await Blog.create({
     title,
     body,
     coverImageUrl,
     createdBy: req.user?._id,
   });
+
   return res.redirect(`/blog/${blog._id}`);
-})
+});
 
 router.get("/:id" , async(req,res)=>{
+  if (!req.user) {
+    return res.redirect("/user/signin");
+  }
   const blog = await Blog.findById(req.params.id).populate('createdBy');
   const comments = await Comment.find({ blogId : req.params.id}).populate('createdBy');
   return res.render("blog",{
